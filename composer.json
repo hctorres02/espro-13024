@@ -6,7 +6,8 @@
         "laminas/laminas-diactoros": "^2.24",
         "laminas/laminas-httphandlerrunner": "^2.5",
         "league/container": "^4.2",
-        "josantonius/session": "^2.0"
+        "josantonius/session": "^2.0",
+        "respect/validation": "^2.2"
     },
     "autoload": {
         "psr-4": {
