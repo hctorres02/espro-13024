@@ -1,0 +1,50 @@
+{% extends "_template/public.twig" %}
+
+{% block title title~' :: '~parent() %}
+
+{% block aside %}
+{% include "_aside/admin.twig" %}
+{% endblock aside %}
+
+{% block main %}
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title is-uppercase">{{ title }}</p>
+        {% if cta %}
+        <a href="{{ cta.url }}" class="card-header-icon">
+            <span class="icon">
+                <i class="fa {{ cta.icon }}"></i>
+            </span>
+            <span>{{ cta.label }}</span>
+        </a>
+        {% endif %}
+    </header>
+    <div class="card-content">
+        {% include "_message.twig" %}
+        {% if _form %}
+        <div class="block">
+            {% include '_forms/'~ _form ~'.twig' %}
+        </div>
+        {% endif %}
+        {% if block('content') is defined %}
+        <div class="block">
+            {{ block('content')|raw }}
+        </div>
+        {% endif %}
+        {% if block('tbody') is defined %}
+        <div class="table-container">
+            <table class="table is-fullwidth">
+                {% if block('thead') is defined %}
+                <thead>
+                    {{ block('thead')|raw }}
+                </thead>
+                {% endif %}
+                <tbody>
+                    {{ block('tbody')|raw }}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock main %}

@@ -1,0 +1,40 @@
+<div class="box">
+    <div class="menu">
+        <p class="menu-label">Olá, {{ _user.name }}</p>
+        <ul class="menu-list">
+            <li>
+                <a href="/">Página inicial</a>
+            </li>
+            <li>
+                <a href="/dashboard">Dashboard</a>
+            </li>
+            <li>
+                <hr />
+            </li>
+            <li>
+                <a href="/departamentos">Departamentos</a>
+            </li>
+            <li>
+                <a href="/aprendizes">Aprendizes</a>
+            </li>
+            <li>
+                <a href="/postagens">Postagens</a>
+            </li>
+            <li>
+                <a href="/comunicados">Comunicados</a>
+            </li>
+            <li>
+                <hr />
+            </li>
+            <li>
+                <a href="/aprendizes/{{ _user.id }}">Meu cadastro</a>
+            </li>
+            <li>
+                <hr />
+            </li>
+            <li>
+                <a href="/logout" class="has-text-danger">Desconectar</a>
+            </li>
+        </ul>
+    </div>
+</div>

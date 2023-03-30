@@ -1,0 +1,62 @@
+<div class="box">
+    <div class="menu">
+        <p class="menu-label">Comunicados</p>
+        {% for warning in warnings %}
+        <p class="">
+            <span class="has-text-weight-bold">{{ warning.title }}</span><br />
+            {{ warning.body }}<br />
+            &mdash; {{ warning.department.name }}
+        </p>
+        {% if not loop.last %}
+        <hr />
+        {% endif %}
+        {% else %}
+        <p class="is-italic">Não há comunicados</p>
+        {% endfor %}
+    </div>
+</div>
+<div class="box">
+    <div class="menu">
+        <p class="menu-label">Departamentos</p>
+        <ul class="menu-list">
+            {% for department in departments %}
+            <li>
+                <a href="/?depto={{ department.name|slug|lower }}">{{ department.name }}</a>
+            </li>
+            {% else %}
+            <p class="is-italic">Não há departamentos</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="box">
+    <div class="menu">
+        <p class="menu-label">Próximos aniversariantes</p>
+        {% for user in birthdays %}
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-64x64">
+                    <img src="https://s.gravatar.com/avatar/{{ user.email }}" alt="Image" class="is-rounded" />
+                </figure>
+            </div>
+            <div class="media-content">
+                <div class="content">
+                    <p>
+                        <strong>{{ user.name|title }}</strong> {{ user.department.name|format('(%s)') }}
+                        <br>
+                        <small>07 de abril</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="is-italic">Não há aniversariantes</p>
+        {% endfor %}
+    </div>
+</div>
+<div class="box">
+    <div class="menu">
+        <p class="menu-label">Conecte-se</p>
+        {% include "_forms/login.twig" %}
+    </div>
+</div>
