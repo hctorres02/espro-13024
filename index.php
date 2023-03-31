@@ -7,9 +7,10 @@ define('ROOT', __DIR__);
 require_once ROOT . '/vendor/autoload.php';
 
 use App\Request;
-use App\Session;
 use Dotenv\Dotenv;
+use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use League\Route\Http\Exception\ForbiddenException;
 use League\Route\Http\Exception\NotFoundException;
 
 Dotenv::createUnsafeImmutable(ROOT)->load(true);
@@ -18,24 +19,21 @@ ini_set('default_charset', getenv('DEFAULT_CHARSET'));
 ini_set('display_errors', getenv('DEBUG'));
 ini_set('error_reporting', E_ALL);
 
-Session::revalidateAuth();
-
 $request = Request::getInstance();
 $router = include_once ROOT . '/src/routes.php';
+$emitter = new SapiEmitter;
 
 try {
-    $response = $router->dispatch($request);
+    $emitter->emit($router->dispatch($request));
+} catch (ForbiddenException $e) {
+    $emitter->emit(new RedirectResponse('/erro403'));
 } catch (NotFoundException $e) {
-    header('location: /erro404');
-    exit;
+    $emitter->emit(new RedirectResponse('/erro404'));
 } catch (Exception $e) {
-    http_response_code(500);
-
     if (getenv('DEBUG')) {
-        exit(nl2br($e->getTraceAsString()));
+        http_response_code(500);
+        exit($e->getMessage());
     }
 
-    exit('<pre>#500: Erro interno do servidor</pre>');
+    $emitter->emit(new RedirectResponse('/erro500'));
 }
-
-(new SapiEmitter)->emit($response);
