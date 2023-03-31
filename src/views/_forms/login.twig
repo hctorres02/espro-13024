@@ -1,0 +1,24 @@
+<form action="/login" method="post">
+    <div class="field">
+        <label class="label">Telefone</label>
+        <div class="control has-icons-left">
+            <input name="phone" class="input" type="tel" placeholder="Telefone" value="{{ _old.phone }}">
+            <span class="icon is-small is-left">
+                <i class="fa fa-phone"></i>
+            </span>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">Senha</label>
+        <div class="control has-icons-left">
+            <input name="password" class="input" type="password" placeholder="********">
+            <span class="icon is-small is-left">
+                <i class="fa fa-key"></i>
+            </span>
+        </div>
+    </div>
+    <button class="button is-dark">
+        <span class="icon"><i class="fa fa-lock"></i></span>
+        <span>Conectar</span>
+    </button>
+</form>

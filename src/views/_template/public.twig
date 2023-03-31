@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-br">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Turma 13024{% endblock title %}</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse/dist/cdn.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js"></script>
+
+        <style>
+            .has-background-custom {
+                background: linear-gradient(90deg, #1b2b4d 5.62%, #173961 28.14%, #115084 72.28%, #0f5a92 95.71%);
+                padding: 4.375rem 0 0;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .is-sticky {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 2rem;
+            }
+
+            .is-fullheight-100vh {
+                min-height: 100vh;
+            }
+
+            @media(max-width: 767px) {
+                .reverse-columns {
+                    flex-direction: column-reverse;
+                    display: flex;
+                }
+            }
+        </style>
+
+        {% block style %}{% endblock style %}
+    </head>
+
+    <body class="is-flex is-flex-direction-column justify-content is-fullheight-100vh is-gapless has-background-light">
+        <header>
+            <div class="hero is-dark has-background-custom">
+                <div class="hero-body">
+                    <div class="container pt-6 has-text-centered has-text-left-desktop">
+                        <h1 class="title is-uppercase">Turma 13024</h1>
+                        <p class="subtitle has-text-weight-light">Gazeta semanal de atividades</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="is-flex-grow-2">
+            <div class="p-4">
+                <div class="container">
+                    <div class="columns reverse-columns">
+                        {% if block('aside') is defined %}
+                        <aside class="column is-4 is-3-desktop">
+                            <div class="is-sticky">
+                                {{ block('aside')|raw }}
+                            </div>
+                        </aside>
+                        {% endif %}
+                        <main class="column">
+                            {% block main %}{% endblock main %}
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="hero is-dark has-background-custom">
+                <div class="hero-body">
+                    <div class="container">
+                        <div class="columns is-vcentered has-text-centered">
+                            <div class="column">
+                                <img src="https://www.espro.org.br/wp-content/uploads/2022/10/logo-branco.svg" />
+                            </div>
+                            <div class="column">
+                                <p>
+                                    Desenvolvido pelo <strong>departamento de comunicação</strong><br />
+                                    da turma 13024
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            function removeItem(e) {
+                e.preventDefault()
+
+                if (confirm('Deseja remover este item?') == false) {
+                    return
+                }
+
+                window.location.href = e.currentTarget.href
+            }
+        </script>
+
+        {% block script %}{% endblock script %}
+    </body>
+
+</html>
