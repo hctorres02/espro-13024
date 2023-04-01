@@ -26,9 +26,9 @@ class Request
         return self::$request;
     }
 
-    public static function validate(ServerRequest $request, array $rules, array $defaults = [])
+    public static function validate(ServerRequest $request, array $rules)
     {
-        $body = array_merge($defaults, $request->getParsedBody());
+        $body = array_filter($request->getParsedBody(), fn ($key) => array_key_exists($key, $rules), ARRAY_FILTER_USE_KEY);
         $session = Session::getInstance();
 
         foreach ($rules as $field => $rule) {
@@ -36,10 +36,10 @@ class Request
                 $rule = [$rule];
             }
 
-            foreach ($rule as $i => $validator) {
-                $value = $body[$field] ?? null;
+            $value = $body[$field] ?? null;
 
-                if (($i == 0 && $validator(new Validator)->validate($value)) || ($i > 0 && $validator($field, $value))) {
+            foreach ($rule as $validator) {
+                if ($validator(new Validator, $value, $field, new Validator)->validate($value)) {
                     continue;
                 }
 
