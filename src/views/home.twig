@@ -1,0 +1,29 @@
+{% extends "_template/public.twig" %}
+
+{% block aside %}
+{% include _user ? "_aside/admin.twig" : "_aside/public.twig" %}
+{% endblock %}
+
+{% block main %}
+{% for post in posts %}
+<article class="card" x-data="{ open: false }">
+    <div class="card-image">
+        <figure class="image is-16by9">
+            <img src="{{ post.image }}" alt="Image" title="{{ post.title }}" class="has-ratio" width="720" height="405" />
+        </figure>
+    </div>
+    <div class="card-content">
+        <p class="subtitle has-text-weight-light">{{ post.published_at|date("d/m/Y") }} | <a href="/?depto={{ post.department.name|slug|lower }}">{{ post.department.name }}</a></p>
+        <h1 class="title is-2 is-uppercase has-text-weight-light">{{ post.title }}</h1>
+        <p x-cloack x-show="open" x-collapse.min.100.duration.1000>{{ post.body|nl2br }}</p>
+    </div>
+    <div class="card-footer" x-show="!open">
+        <a class="card-footer-item" @click="open=!open">Leia mais [+]</a>
+    </div>
+</article>
+{% else %}
+<div class="message is-dark has-text-centered">
+    <p class="message-body is-italic">Não há publicações disponíveis</p>
+</div>
+{% endfor %}
+{% endblock %}
