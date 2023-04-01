@@ -28,18 +28,4 @@ class Session
 
         return self::$instance;
     }
-
-    public static function revalidateAuth(): void
-    {
-        $user = self::getInstance()->pull('user');
-
-        if ($user) {
-            $user = User::newQuery()->where([
-                'id' => $user['id'] ?? false,
-                'status' => true,
-            ])->get();
-        }
-
-        self::getInstance()->set('user', $user);
-    }
 }
