@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middlewares;
 
+use App\Models\Department;
 use App\Models\User;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\RedirectResponse;
@@ -35,6 +36,13 @@ class AuthMiddleware extends Middleware implements MiddlewareInterface
             ]);
 
             return new RedirectResponse('/login');
+        }
+
+        if ($user['department_id']) {
+            $user['department'] = Department::newQuery()->where([
+                'id' => $user['department_id'],
+                'status' => true,
+            ])->get() ?: [];
         }
 
         $this->session->set('user', filter_protected($user, User::$protected));
