@@ -1,5 +1,32 @@
 <?php
 
+use App\Session;
+
+function can(string $permission, ?int $department_id = null)
+{
+    $user = Session::getInstance()->get('user');
+
+    if (empty($user)) {
+        return false;
+    }
+
+    $isSuperUser = $user['is_super'] ?? false;
+    $isSuperDepartment = $user['department']['is_super'] ?? false;
+    $isOwner = $user['id'] == ($user['department']['owner_id'] ?? false) && $department_id == ($user['department']['id'] ?? false);
+
+    $permissions = [
+        'create' => $isSuperUser || $isSuperDepartment,
+        'update' => $isSuperUser || $isSuperDepartment || $isOwner,
+        'destroy' => $isSuperUser || $isSuperDepartment,
+    ];
+
+    if ($permission === '*') {
+        return $permissions;
+    }
+
+    return $permissions[$permission] ?? false;
+}
+
 function get_colors(bool $only_keys = false)
 {
     $colors = [

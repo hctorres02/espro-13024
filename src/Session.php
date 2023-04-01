@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Models\User;
 use Josantonius\Session\Session as SessionManager;
 
 class Session

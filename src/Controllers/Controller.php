@@ -18,6 +18,7 @@ use Twig\Environment;
 use Twig\Extra\Html\HtmlExtension;
 use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class Controller
 {
@@ -48,6 +49,7 @@ class Controller
         $this->twig = new Environment(new FilesystemLoader(ROOT . '/src/views'));
         $this->twig->addExtension(new StringExtension);
         $this->twig->addExtension(new HtmlExtension);
+        $this->twig->addFunction(new TwigFunction('can', fn ($permission, $department_id = null) => can($permission, $department_id)));
     }
 
     protected function view(string $view, array $context = [], int $status = 200): Response
