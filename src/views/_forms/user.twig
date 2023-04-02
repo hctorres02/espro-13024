@@ -1,0 +1,91 @@
+<form method="post" x-data="{}">
+    <div class="columns is-multiline">
+        <div class="column is-12 is-8-desktop">
+            <div class="field">
+                <label class="label">Nome</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <input type="text" name="name" value="{{ _old.name|default(user.name) }}" class="{{ html_classes('input', { 'is-danger': _validation.name }) }}" minlength="3" maxlength="60" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-4-desktop">
+            <div class="field">
+                <label class="label">Departamento</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-building"></i>
+                    </span>
+                    <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.department_id }) }}">
+                        <select name="department_id">
+                            <option value="">Nenhum</option>
+                            {% for department in departments %}
+                            <option value="{{ department.id }}">{{ department.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="field">
+                <label class="label">Telefone</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-phone"></i>
+                    </span>
+                    <input type="text" name="phone" value="{{ _old.phone|default(user.phone) }}" class="{{ html_classes('input', { 'is-danger': _validation.phone }) }}" x-mask:dynamic="phoneMask" placeholder="(xx) 9xxxx-xxxx" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-6-desktop">
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-envelope"></i>
+                    </span>
+                    <input type="text" name="email" value="{{ _old.email|default(user.email) }}" class="{{ html_classes('input', { 'is-danger': _validation.email }) }}" maxlength="60">
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="field">
+                <label class="label">Aniversário</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-birthday-cake"></i>
+                    </span>
+                    <input type="date" name="birth_date" value="{{ _old.birth_date|default(user.birth_date) }}" class="{{ html_classes('input', { 'is-danger': _validation.birth_date }) }}">
+                </div>
+            </div>
+        </div>
+        {% if not user %}
+        <div class="column is-12 is-4-desktop">
+            <div class="field">
+                <label class="label">Senha</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-key"></i>
+                    </span>
+                    <input type="password" name="password" class="{{ html_classes('input', { 'is-danger': _validation.password }) }}" minlength="6" maxlength="18" required>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="buttons">
+        <button class="button is-black">
+            <span class="icon"><i class="fa fa-save"></i></span>
+            <span>{{ user ? 'Salvar' : 'Cadastrar' }}</span>
+        </button>
+        {% if user %}
+        <a href="/aprendizes/{{ user.id }}/remover" class="button is-ghost has-text-danger" x-on:click="removeItem">
+            <span class="icon"><i class="fa fa-trash"></i></span>
+            <span>Excluír aprendiz</span>
+        </a>
+        {% endif %}
+    </div>
+</form>

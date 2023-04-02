@@ -40,6 +40,7 @@ CREATE TABLE `users` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `birth_date` date DEFAULT NULL,
+  `is_super` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`phone`)
