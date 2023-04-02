@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
+use App\Controllers\DepartmentController;
 use App\Controllers\ErrorController;
 use App\Controllers\HomeController;
 use App\Middlewares\AuthMiddleware;
@@ -21,6 +22,15 @@ $router->group('/login', function (RouteGroup $router) {
 $router->get('/logout', [AuthController::class, 'destroy']);
 
 $router->get('/dashboard', DashboardController::class)->middleware(new AuthMiddleware);
+
+$router->group('/departamentos', function (RouteGroup $router) {
+    $router->get('/', [DepartmentController::class, 'index']);
+    $router->get('/cadastrar', [DepartmentController::class, 'create']);
+    $router->post('/cadastrar', [DepartmentController::class, 'store']);
+    $router->get('/{id:number}', [DepartmentController::class, 'edit']);
+    $router->post('/{id:number}', [DepartmentController::class, 'update']);
+    $router->get('/{id:number}/remover', [DepartmentController::class, 'destroy']);
+})->middleware(new AuthMiddleware);
 
 $router->get('/erro403', [ErrorController::class, 'error403']);
 $router->get('/erro404', [ErrorController::class, 'error404']);

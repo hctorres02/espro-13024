@@ -1,0 +1,98 @@
+<form method="post" x-data="{ color: '{{ _old.color|default(department.color)|default('is-info') }}' }">
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <div class="field">
+                <label class="label">Nome</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-file-signature"></i>
+                    </span>
+                    <input type="text" name="name" value="{{ _old.name|default(department.name) }}" class="{{ html_classes('input', { 'is-danger': _validation.name }) }}" minlength="3" maxlength="255" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-5 is-3-desktop">
+            <div class="field">
+                <label class="label">Sigla</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-signature"></i>
+                    </span>
+                    <input type="text" name="shortname" value="{{ _old.shortname|default(department.shortname) }}" class="{{ html_classes('input', 'is-uppercase', { 'is-danger': _validation.shortname }) }}" minlength="2" maxlength="3" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-7 is-3-desktop">
+            <div class="field">
+                <label class="label">Cor</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-palette" :class="color.replace('is-', 'has-text-')"></i>
+                    </span>
+                    <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.color }) }}">
+                        <select name="color" x-model="color">
+                            {% for value, name in colors %}
+                            <option value="{{ value }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if (department) %}
+        <div class="column is-12 is-6-desktop">
+            <div class="field">
+                <label class="label">Aprendiz-líder</label>
+                <div class="control has-icons-left">
+                    <span class="icon">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.owner_id }) }}">
+                        <select name="owner_id">
+                            {% if users %}
+                            <option value="">Ninguém</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}" {{ user.id==_old.owner_id|default(department.owner_id) ? 'selected' : '' }}>{{ user.name }}</option>
+                            {% endfor %}
+                            {% else %}
+                            <option selected disabled>Não há aprendizes neste departamento</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% if can('create') %}
+    <div class="columns">
+        <div class="column is-12">
+            <div class="field">
+                <div class="control">
+                    <label class="label">Mandatário</label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="is_super" value="1" {{ _old.is_super|default(department.is_super) ? 'checked' : '' }}>
+                        Conceder privilégios administrativos aos membros do departamento
+                    </label>
+                    <small class="help">
+                        Aprendizes de um departamento mandatário são administradores do sistema.<br />
+                        Somente um departamento pode ser mandatário.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="buttons">
+        <button class="button is-black">
+            <span class="icon"><i class="fa fa-save"></i></span>
+            <span>{{ department ? 'Salvar' : 'Cadastrar' }}</span>
+        </button>
+        {% if department and can('destroy') %}
+        <a href="/departamentos/{{ department.id }}/remover" class="button is-ghost has-text-danger" x-on:click="removeItem">
+            <span class="icon"><i class="fa fa-trash"></i></span>
+            <span>Excluír departamento</span>
+        </a>
+        {% endif %}
+    </div>
+</form>
