@@ -1,6 +1,7 @@
 <?php
 
 use App\Session;
+use Dotenv\Exception\InvalidFileException;
 
 function can(string $permission, ?int $department_id = null)
 {
