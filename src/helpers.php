@@ -52,6 +52,34 @@ function is_color(string $color)
     return array_key_exists($color, get_colors());
 }
 
+function get_statuses(bool $only_keys = false): array
+{
+    $statuses = [
+        'draft' => 'Rascunho',
+        'published' => 'Publicado',
+    ];
+
+    if ($only_keys) {
+        return array_keys($statuses);
+    }
+
+    return $statuses;
+}
+
+function get_status(string $key): string
+{
+    if (is_status($key) == false) {
+        return $key;
+    }
+
+    return get_statuses()[$key];
+}
+
+function is_status(string $status): bool
+{
+    return array_key_exists($status, get_statuses());
+}
+
 function switch_vars($a, $b, $expected): array
 {
     if ($b == $expected) {
@@ -213,4 +241,31 @@ function truncate($text, $length = 100, $ending = '...', $exact = true, $conside
     }
 
     return $truncate;
+}
+
+function upload_image(string $tmp_name, int $width, int $height = -1)
+{
+    if ($height < 1) {
+        $height = $width;
+    }
+
+    if (file_exists($tmp_name) == false) {
+        throw new InvalidFileException;
+    }
+
+    [
+        $originWidth,
+        $originHeight
+    ] = getimagesize($tmp_name);
+
+    $data = file_get_contents($tmp_name);
+    $origin = imagecreatefromstring($data);
+    $final = imagecreatetruecolor($width, $height);
+    $filename = bin2hex(random_bytes(12));
+    $filename = "uploads/{$filename}.png";
+
+    imagecopyresized($final, $origin, 0, 0, 0, 0, $width, $height, $originWidth, $originHeight);
+    imagepng($final, $filename);
+
+    return $filename;
 }
