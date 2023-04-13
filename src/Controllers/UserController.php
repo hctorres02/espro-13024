@@ -159,12 +159,12 @@ class UserController extends Controller
             'name' => fn ($v) => $v->alpha(' ', 'á', 'ã', 'â', 'é', 'ê', 'í', 'ó', 'ô', 'õ', 'ú')->length(4, 60),
             'department_id' => fn ($v, $value) => $v->equals($this->department->newQuery()->where(['id' => $value])->get('id')),
             'phone' => fn ($v, $value, $field) => $v->phone('BR')->equals($this->user->newQuery()->isUnique($field, $value, $id)),
-            'email' => fn ($v, $value, $field, $v2) => $v->optional($v2->email()),
-            'birth_date' => fn ($v, $value, $field, $v2) => $v->optional($v2->date()),
+            'email' => fn ($v) => (clone $v)->optional($v->email()),
+            'birth_date' => fn ($v) => (clone $v)->optional($v->date()),
         ];
 
         if (empty($id)) {
-            $rules['password'] = fn ($v, $value, $field, $v2) => $v->length(6, 18);
+            $rules['password'] = fn ($v) => $v->length(6, 18);
         }
 
         $body = Request::validate($request, $rules);

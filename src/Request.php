@@ -26,29 +26,27 @@ class Request
         return self::$request;
     }
 
-    public static function validate(ServerRequest $request, array $rules)
+    public static function validate(ServerRequest $request, array $rules): array|false
     {
         $body = array_filter($request->getParsedBody(), fn ($key) => array_key_exists($key, $rules), ARRAY_FILTER_USE_KEY);
         $session = Session::getInstance();
 
+
         foreach ($rules as $field => $rule) {
-            if (is_array($rule) == false) {
-                $rule = [$rule];
+            $value = $body[$field] ?? ($_FILES[$field]['tmp_name'] ?? null);
+
+            $v = $rule(new Validator, $value, $field);
+
+            if ($v->validate($value)) {
+                $body[$field] = $value;
+                continue;
             }
 
-            $value = $body[$field] ?? null;
+            $session->replace([
+                'validation' => array_merge($session->get('validation', []), [$field => true]),
+            ]);
 
-            foreach ($rule as $validator) {
-                if ($validator(new Validator, $value, $field, new Validator)->validate($value)) {
-                    continue;
-                }
-
-                $session->replace([
-                    'validation' => array_merge($session->get('validation', []), [$field => true]),
-                ]);
-
-                break;
-            }
+            break;
         }
 
         if ($session->get('validation')) {

@@ -162,7 +162,7 @@ class DepartmentController extends Controller
     private function validate(ServerRequest $request, ?int $id = null): bool|array
     {
         $body = Request::validate($request, [
-            'name' => fn ($v, $value, $field) => $v->alpha(' ', 'á', 'ã', 'â', 'é', 'ê', 'í', 'ó', 'ô', 'õ', 'ú')->length(3, 255)->equals($this->department->newQuery()->isUnique($field, $value, $id)),
+            'name' => fn ($v, $value, $field) => $v->alpha(' ', 'á', 'ã', 'â', 'à', 'é', 'ê', 'í', 'ó', 'õ', 'ô', 'ú', 'ç')->length(3, 255)->equals($this->department->newQuery()->isUnique($field, $value, $id)),
             'shortname' => fn ($v, $value, $field) => $v->alpha()->length(2, 3)->equals($this->department->newQuery()->isUnique($field, $value, $id)),
             'owner_id' => fn ($v, $value) => $v->equals($this->user->newQuery()->where(['id' => $value, 'department_id' => $id])->get('id')),
             'color' => fn ($v) => $v->in(get_colors(true)),
