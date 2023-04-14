@@ -7,6 +7,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\DepartmentController;
 use App\Controllers\ErrorController;
 use App\Controllers\HomeController;
+use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Middlewares\AuthMiddleware;
 use App\Router;
@@ -40,6 +41,15 @@ $router->group('/aprendizes', function (RouteGroup $router) {
     $router->get('/{id:number}', [UserController::class, 'edit']);
     $router->post('/{id:number}', [UserController::class, 'update']);
     $router->get('/{id:number}/remover', [UserController::class, 'destroy']);
+})->middleware(new AuthMiddleware);
+
+$router->group('/postagens', function (RouteGroup $router) {
+    $router->get('/', [PostController::class, 'index']);
+    $router->get('/cadastrar', [PostController::class, 'create']);
+    $router->post('/cadastrar', [PostController::class, 'store']);
+    $router->get('/{id:number}', [PostController::class, 'edit']);
+    $router->post('/{id:number}', [PostController::class, 'update']);
+    $router->get('/{id:number}/remover', [PostController::class, 'destroy']);
 })->middleware(new AuthMiddleware);
 
 $router->get('/erro403', [ErrorController::class, 'error403']);

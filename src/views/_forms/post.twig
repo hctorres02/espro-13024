@@ -1,0 +1,87 @@
+<form method="post" enctype="multipart/form-data" x-data="initPost('/{{ post.image }}')">
+    <div class="columns is-multiline">
+        {% if not post %}
+        <div class="column is-12">
+            <div class="field">
+                <label class="label">Capa</label>
+                <div class="control" x-show="postImage">
+                    <figure class="image is-16by9">
+                        <img :src="postImage" alt="Image" title="{{ post.title }}" class="has-ratio" width="720" height="405" />
+                    </figure>
+                </div>
+            </div>
+            <div class="file is-boxed is-fullwidth">
+                <label class="file-label has-text-centered">
+                    <input type="file" name="image" accept="image/*" @change="fileChosen" class="{{ html_classes('file-input', { 'is-danger': _validation.image }) }}" {{ not post ? 'required' : '' }}>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">Escolher imagem...</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+        {% endif %}
+        <div class="column is-12">
+            <div class="field">
+                <label class="label">Título</label>
+                <div class="control">
+                    <input type="text" name="title" value="{{ _old.title|default(post.title) }}" class="{{ html_classes('input', { 'is-danger': _validation.title }) }}" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12">
+            <div class="field">
+                <label class="label">Conteúdo</label>
+                <textarea name="body" rows="10" class="{{ html_classes('textarea', { 'is-danger': _validation.body }) }}" x-grow>{{ post.body }}</textarea>
+            </div>
+        </div>
+        <div class="column is-12 is-6-desktop">
+            <div class="field">
+                <label class="label">Departamento</label>
+                <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.department_id }) }}">
+                    <select name="department_id" required>
+                        {% for department in departments %}
+                        <option value="{{ department.id }}" {{ department.id==(_old.department_id|default(post.department_id)) or department.id==_user.department_id ? 'selected' : '' }}>{{ department.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="field">
+                <label class="label">Status</label>
+                <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.status }) }}">
+                    <select name="status" required>
+                        {% for value, name in statuses %}
+                        <option value="{{ value }}" {{ value==(_old.status|default(post.status)|default('published')) ? 'selected' : '' }}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="{{ html_classes('field', { 'is-danger': _validation.published_at }) }}">
+                <label class="label">Publicado em</label>
+                <div class="control">
+                    <input type="date" name="published_at" class="input" value="{{ _old.published_at|default(post.published_at)|default('now'|date('Y-m-d')) }}" required>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="button is-black">
+            <span class="icon"><i class="fa fa-save"></i></span>
+            <span>{{ post ? 'Salvar' : 'Cadastrar' }}</span>
+        </button>
+        {% if post %}
+        <a href="/postagens/{{ post.id }}/remover" class="button is-ghost has-text-danger" x-on:click="removeItem">
+            <span class="icon"><i class="fa fa-trash"></i></span>
+            <span>Excluír postagem</span>
+        </a>
+        {% else %}
+        <input type="hidden" name="author_id" value="{{ _user.id }}">
+        {% endif %}
+    </div>
+</form>

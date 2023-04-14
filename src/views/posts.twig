@@ -1,0 +1,37 @@
+{% extends "_template/admin.twig" %}
+
+{% block thead %}
+<tr>
+    <th>Depto.</th>
+    <th>Título</th>
+    <th>Status</th>
+    <th>Publicado em</th>
+</tr>
+{% endblock thead %}
+
+{% block tbody %}
+{% for post in posts %}
+<tr>
+    <td style="width: 84px">
+        {{ post.department.shortname}}
+    </td>
+    <td>
+        {% if can('update', post.department.id) %}
+        <a href="/postagens/{{ post.id }}">{{ post.title }}</a>
+        {% else %}
+        {{ post.title }}
+        {% endif %}
+    </td>
+    <td style="width: 84px">
+        {{ get_status(post.status) }}
+    </td>
+    <td style="width: 140px">
+        {{ post.status=='published' ? post.published_at|date('d/m/Y') : '--' }}
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="2">Não há dados</td>
+</tr>
+{% endfor %}
+{% endblock tbody %}
