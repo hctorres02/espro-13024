@@ -5,26 +5,34 @@ on:
     - main
 jobs:
   web-deploy:
-    name: Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v2
-
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4.8'
+        php-version: '8.1'
+
+    - name: Get latest code
+      uses: actions/checkout@v2
 
     - name: Install dependencies
       run: composer update --prefer-dist
-    
-    - name: Generate autoload
-      run: composer dump-autoload
-      
+
     - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      uses: SamKirkland/web-deploy@v1
       with:
-        server: ${{ secrets.server }}
+        target-server: ${{ secrets.server }}
+        destination-path: ${{ secrets.server_dir }}
+        remote-user: ${{ secrets.username }}
+        private-ssh-key: ${{ secrets.password }}
+
+    - name: Generate autoload
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.server }}
         username: ${{ secrets.username }}
-        password: ${{ secrets.password }}
+        key: ${{ secrets.password }}
+        script: |
+          cd ${{ secrets.server_dir }}
+          chown -R www ./
+          composer dump-autoload
