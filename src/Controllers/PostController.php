@@ -17,7 +17,7 @@ class PostController extends Controller
         $posts = $this->post->join([
             '[><]departments' => ['department_id' => 'id'],
         ])->where([
-            'posts.status' => 'published',
+            'posts.status' => ['draft', 'published'],
             'posts.published_at[<=]' => today(),
         ])->select([
             'posts.id',
