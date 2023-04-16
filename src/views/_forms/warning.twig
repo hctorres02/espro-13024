@@ -1,0 +1,72 @@
+<form method="post" enctype="multipart/form-data" x-data>
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <div class="field">
+                <label class="label">Título</label>
+                <div class="control">
+                    <input type="text" name="title" value="{{ _old.title|default(warning.title) }}" class="{{ html_classes('input', { 'is-danger': _validation.title }) }}" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12">
+            <div class="field">
+                <label class="label">Conteúdo</label>
+                <textarea name="body" rows="3" class="{{ html_classes('textarea', { 'is-danger': _validation.body }) }}" minlength="20" maxlength="255" style="resize: none;" required>{{ warning.body }}</textarea>
+            </div>
+        </div>
+        <div class="column is-12 is-9-desktop">
+            <div class="field">
+                <label class="label">Departamento</label>
+                <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.department_id }) }}">
+                    <select name="department_id" required>
+                        {% for department in departments %}
+                        <option value="{{ department.id }}" {{ department.id==(_old.department_id|default(warning.department_id)) or department.id==_user.department_id ? 'selected' : '' }}>{{ department.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="field">
+                <label class="label">Status</label>
+                <div class="{{ html_classes('select', 'is-fullwidth', { 'is-danger': _validation.status }) }}">
+                    <select name="status" required>
+                        {% for value, name in statuses %}
+                        <option value="{{ value }}" {{ value==(_old.status|default(warning.status)|default('published')) ? 'selected' : '' }}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="{{ html_classes('field', { 'is-danger': _validation.published_at }) }}">
+                <label class="label">Publicado em</label>
+                <div class="control">
+                    <input type="date" name="published_at" class="input" value="{{ _old.published_at|default(warning.published_at)|default('now'|date('Y-m-d')) }}" required>
+                </div>
+            </div>
+        </div>
+        <div class="column is-12 is-3-desktop">
+            <div class="{{ html_classes('field', { 'is-danger': _validation.expires_at }) }}">
+                <label class="label">Válido até</label>
+                <div class="control">
+                    <input type="date" name="expires_at" class="input" value="{{ _old.expires_at|default(warning.expires_at)|default('next wednesday'|date('Y-m-d')) }}" required>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="button is-black">
+            <span class="icon"><i class="fa fa-save"></i></span>
+            <span>{{ warning ? 'Salvar' : 'Cadastrar' }}</span>
+        </button>
+        {% if warning %}
+        <a href="/comunicados/{{ warning.id }}/remover" class="button is-ghost has-text-danger" x-on:click="removeItem">
+            <span class="icon"><i class="fa fa-trash"></i></span>
+            <span>Excluír comunicado</span>
+        </a>
+        {% else %}
+        <input type="hidden" name="author_id" value="{{ _user.id }}">
+        {% endif %}
+    </div>
+</form>

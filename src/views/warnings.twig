@@ -1,0 +1,37 @@
+{% extends "_template/admin.twig" %}
+
+{% block thead %}
+<tr>
+    <th>Depto.</th>
+    <th>Título</th>
+    <th>Status</th>
+    <th>Publicado em</th>
+</tr>
+{% endblock thead %}
+
+{% block tbody %}
+{% for warning in warnings %}
+<tr>
+    <td style="width: 84px">
+        {{ warning.department.shortname}}
+    </td>
+    <td>
+        {% if can('update', warning.department.id) %}
+        <a href="/comunicados/{{ warning.id }}">{{ warning.title }}</a>
+        {% else %}
+        {{ warning.title }}
+        {% endif %}
+    </td>
+    <td style="width: 84px">
+        {{ get_status(warning.status) }}
+    </td>
+    <td style="width: 140px">
+        {{ warning.status=='published' ? warning.published_at|date('d/m/Y') : '--' }}
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="4">Não há dados</td>
+</tr>
+{% endfor %}
+{% endblock tbody %}

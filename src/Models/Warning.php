@@ -18,8 +18,8 @@ class Warning extends Model
                 '[><]departments' => ['department_id' => 'id'],
             ])
             ->select([
-                'warning.title',
-                'warning.body',
+                'warnings.title',
+                'warnings.body',
                 'department' => [
                     'departments.id',
                     'departments.name',

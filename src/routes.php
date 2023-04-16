@@ -9,6 +9,7 @@ use App\Controllers\ErrorController;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
+use App\Controllers\WarningController;
 use App\Middlewares\AuthMiddleware;
 use App\Router;
 use League\Route\RouteGroup;
@@ -50,6 +51,15 @@ $router->group('/postagens', function (RouteGroup $router) {
     $router->get('/{id:number}', [PostController::class, 'edit']);
     $router->post('/{id:number}', [PostController::class, 'update']);
     $router->get('/{id:number}/remover', [PostController::class, 'destroy']);
+})->middleware(new AuthMiddleware);
+
+$router->group('/comunicados', function (RouteGroup $router) {
+    $router->get('/', [WarningController::class, 'index']);
+    $router->get('/cadastrar', [WarningController::class, 'create']);
+    $router->post('/cadastrar', [WarningController::class, 'store']);
+    $router->get('/{id:number}', [WarningController::class, 'edit']);
+    $router->post('/{id:number}', [WarningController::class, 'update']);
+    $router->get('/{id:number}/remover', [WarningController::class, 'destroy']);
 })->middleware(new AuthMiddleware);
 
 $router->get('/erro403', [ErrorController::class, 'error403']);
