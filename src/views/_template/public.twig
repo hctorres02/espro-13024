@@ -6,11 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Turma 13024{% endblock title %}</title>
 
+        <link rel="preconnect" href="https://unpkg.com">
+        <link rel="preconnect" href="https://cdn.jsdelivr.net">
         <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.4/css/bulma.min.css">
         <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
 
+        <script defer src="https://unpkg.com/alpinejs-textarea-grow@1.x.x/dist/grow.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse/dist/cdn.min.js"></script>
-        <script defer src="https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
 
         <style>
             .has-background-custom {
@@ -101,6 +105,37 @@
                 }
 
                 window.location.href = e.currentTarget.href
+            }
+
+            function phoneMask(input) {
+                if (input.length == 19) {
+                    return '+55 (99) 99999-9999'
+                }
+
+                return '+55 (99) 9999-9999'
+            }
+
+            function initPost(postImage = '') {
+                return {
+                    postImage,
+
+                    fileChosen(event) {
+                        const [file] = event.target.files
+
+                        if (Boolean(file) == false) {
+                            return
+                        }
+
+                        this.setDataUrl(file, (event) => this.postImage = event.target.result)
+                    },
+
+                    setDataUrl(file, callback) {
+                        const fileReader = new FileReader()
+
+                        fileReader.addEventListener('load', callback)
+                        fileReader.readAsDataURL(file)
+                    },
+                }
             }
         </script>
 

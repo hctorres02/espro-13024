@@ -10,7 +10,7 @@
 <div class="card">
     <header class="card-header">
         <p class="card-header-title is-uppercase">{{ title }}</p>
-        {% if cta %}
+        {% if cta and can('create') %}
         <a href="{{ cta.url }}" class="card-header-icon">
             <span class="icon">
                 <i class="fa {{ cta.icon }}"></i>

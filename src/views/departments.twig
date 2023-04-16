@@ -1,0 +1,27 @@
+{% extends "_template/admin.twig" %}
+
+{% block thead %}
+<tr>
+    <th style="width: 10%">Sigla</th>
+    <th>Nome</th>
+</tr>
+{% endblock thead %}
+
+{% block tbody %}
+{% for department in departments %}
+<tr>
+    <td>{{ department.shortname }}</td>
+    <td>
+        {% if can('update', department.id) %}
+        <a href="/departamentos/{{ department.id }}">{{ department.name }}</a>
+        {% else %}
+        {{ department.name }}
+        {% endif %}
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="2">Não há dados</td>
+</tr>
+{% endfor %}
+{% endblock tbody %}

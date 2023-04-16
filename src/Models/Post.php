@@ -16,6 +16,7 @@ class Post extends Model
             ->join([
                 '[><]departments' => ['department_id' => 'id'],
             ])
+            ->orderBy('posts.published_at')
             ->select([
                 'posts.id',
                 'posts.title',

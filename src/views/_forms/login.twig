@@ -1,8 +1,8 @@
-<form action="/login" method="post">
+<form action="/login" method="post" x-data>
     <div class="field">
         <label class="label">Telefone</label>
         <div class="control has-icons-left">
-            <input name="phone" class="input" type="tel" placeholder="Telefone" value="{{ _old.phone }}">
+            <input name="phone" class="input" type="tel" x-mask:dynamic="phoneMask" placeholder="(xx) 9xxxx-xxxx" value="{{ _old.phone }}">
             <span class="icon is-small is-left">
                 <i class="fa fa-phone"></i>
             </span>

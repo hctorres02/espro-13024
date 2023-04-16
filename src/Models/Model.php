@@ -57,4 +57,9 @@ class Model
     {
         return $this->where(['GROUP' => $group]);
     }
+
+    public function orderBy(string|array $order)
+    {
+        return $this->where(['ORDER' => $order]);
+    }
 }

@@ -40,6 +40,7 @@ CREATE TABLE `users` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `birth_date` date DEFAULT NULL,
+  `is_super` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`phone`)
@@ -57,26 +58,16 @@ CREATE TABLE `warnings` (
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE
-  `departments`
-ADD
-  CONSTRAINT `departments_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`);
+ALTER TABLE `departments`
+  ADD CONSTRAINT `departments_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
-ALTER TABLE
-  `posts`
-ADD
-  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`),
-ADD
-  CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
+ALTER TABLE `posts`
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
-ALTER TABLE
-  `users`
-ADD
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`);
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
-ALTER TABLE
-  `warnings`
-ADD
-  CONSTRAINT `warnings_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`),
-ADD
-  CONSTRAINT `warnings_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
+ALTER TABLE `warnings`
+  ADD CONSTRAINT `warnings_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `warnings_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;

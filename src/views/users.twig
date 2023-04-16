@@ -1,0 +1,25 @@
+{% extends "_template/admin.twig" %}
+
+{% block thead %}
+<tr>
+    <th>Nome</th>
+</tr>
+{% endblock thead %}
+
+{% block tbody %}
+{% for user in users %}
+<tr>
+    <td>
+        {% if user.id==_user.id or can('update', _user.department.id) %}
+        <a href="/aprendizes/{{ user.id }}">{{ user.name }}</a>
+        {% else %}
+        {{ user.name }}
+        {% endif %}
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="2">Não há dados</td>
+</tr>
+{% endfor %}
+{% endblock tbody %}

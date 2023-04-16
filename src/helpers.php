@@ -1,5 +1,33 @@
 <?php
 
+use App\Session;
+use Dotenv\Exception\InvalidFileException;
+
+function can(string $permission, ?int $department_id = null)
+{
+    $user = Session::getInstance()->get('user');
+
+    if (empty($user)) {
+        return false;
+    }
+
+    $isSuperUser = $user['is_super'] ?? false;
+    $isSuperDepartment = $user['department']['is_super'] ?? false;
+    $isOwner = $user['id'] == ($user['department']['owner_id'] ?? false) && $department_id == ($user['department']['id'] ?? false);
+
+    $permissions = [
+        'create' => $isSuperUser || $isSuperDepartment,
+        'update' => $isSuperUser || $isSuperDepartment || $isOwner,
+        'destroy' => $isSuperUser || $isSuperDepartment,
+    ];
+
+    if ($permission === '*') {
+        return $permissions;
+    }
+
+    return $permissions[$permission] ?? false;
+}
+
 function get_colors(bool $only_keys = false)
 {
     $colors = [
@@ -22,6 +50,34 @@ function get_colors(bool $only_keys = false)
 function is_color(string $color)
 {
     return array_key_exists($color, get_colors());
+}
+
+function get_statuses(bool $only_keys = false): array
+{
+    $statuses = [
+        'draft' => 'Rascunho',
+        'published' => 'Publicado',
+    ];
+
+    if ($only_keys) {
+        return array_keys($statuses);
+    }
+
+    return $statuses;
+}
+
+function get_status(string $key): string
+{
+    if (is_status($key) == false) {
+        return $key;
+    }
+
+    return get_statuses()[$key];
+}
+
+function is_status(string $status): bool
+{
+    return array_key_exists($status, get_statuses());
 }
 
 function switch_vars($a, $b, $expected): array
@@ -185,4 +241,31 @@ function truncate($text, $length = 100, $ending = '...', $exact = true, $conside
     }
 
     return $truncate;
+}
+
+function upload_image(string $tmp_name, int $width, int $height = -1)
+{
+    if ($height < 1) {
+        $height = $width;
+    }
+
+    if (file_exists($tmp_name) == false) {
+        throw new InvalidFileException;
+    }
+
+    [
+        $originWidth,
+        $originHeight
+    ] = getimagesize($tmp_name);
+
+    $data = file_get_contents($tmp_name);
+    $origin = imagecreatefromstring($data);
+    $final = imagecreatetruecolor($width, $height);
+    $filename = bin2hex(random_bytes(12));
+    $filename = "uploads/{$filename}.png";
+
+    imagecopyresized($final, $origin, 0, 0, 0, 0, $width, $height, $originWidth, $originHeight);
+    imagepng($final, $filename);
+
+    return $filename;
 }

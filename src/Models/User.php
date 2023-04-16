@@ -22,6 +22,7 @@ class User extends Model
             ->join([
                 '[>]departments' => ['department_id' => 'id'],
             ])
+            ->orderBy('users.birth_date')
             ->select([
                 'users.name',
                 'department' => [

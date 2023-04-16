@@ -1,0 +1,30 @@
+{% extends "_template/admin.twig" %}
+
+{% block content %}
+<div class="level has-text-centered">
+    <div class="level-item">
+        <div>
+            <p class="heading">Departamentos</p>
+            <p class="title">{{ departments }}</p>
+        </div>
+    </div>
+    <div class="level-item">
+        <div>
+            <p class="heading">Aprendizes</p>
+            <p class="title">{{ users }}</p>
+        </div>
+    </div>
+    <div class="level-item">
+        <div>
+            <p class="heading">Postagens</p>
+            <p class="title">{{ posts }}</p>
+        </div>
+    </div>
+    <div class="level-item">
+        <div>
+            <p class="heading">Comunicados</p>
+            <p class="title">{{ warnings }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
