@@ -22,7 +22,7 @@
                         <select name="department_id">
                             <option value="">Nenhum</option>
                             {% for department in departments %}
-                            <option value="{{ department.id }}">{{ department.name }}</option>
+                            <option value="{{ department.id }}" {{ department.id==(_old.department_id|default(user.department_id)) or department.id==_user.department_id ? 'selected' : '' }}>{{ department.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
