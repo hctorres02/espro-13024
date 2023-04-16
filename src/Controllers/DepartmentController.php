@@ -17,7 +17,7 @@ class DepartmentController extends Controller
     {
         $departments = $this->department->where([
             'status' => true,
-        ])->select([
+        ])->orderBy('name')->select([
             'id',
             'name',
             'shortname',

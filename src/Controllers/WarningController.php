@@ -20,7 +20,7 @@ class WarningController extends Controller
             'warnings.status' => ['draft', 'published'],
             'warnings.published_at[<=]' => today(),
             'warnings.expires_at[>=]' => today(),
-        ])->select([
+        ])->orderBy('warnings.published_at')->select([
             'warnings.id',
             'warnings.title',
             'warnings.status',

@@ -19,7 +19,7 @@ class PostController extends Controller
         ])->where([
             'posts.status' => ['draft', 'published'],
             'posts.published_at[<=]' => today(),
-        ])->select([
+        ])->orderBy('posts.published_at')->select([
             'posts.id',
             'posts.title',
             'posts.status',

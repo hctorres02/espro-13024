@@ -8,8 +8,11 @@ class Department extends Model
 
     public function homeDepartments()
     {
-        return $this->where([
-            'status' => true,
-        ])->select();
+        return $this
+            ->where([
+                'status' => true,
+            ])
+            ->orderBy('name')
+            ->select();
     }
 }

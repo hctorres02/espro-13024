@@ -18,7 +18,7 @@ class UserController extends Controller
         $users = $this->user->where([
             'is_super' => false,
             'status' => true,
-        ])->select([
+        ])->orderBy('name')->select([
             'id',
             'name',
         ]);

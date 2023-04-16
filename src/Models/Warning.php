@@ -17,6 +17,7 @@ class Warning extends Model
             ->join([
                 '[><]departments' => ['department_id' => 'id'],
             ])
+            ->orderBy('warnings.published_at')
             ->select([
                 'warnings.title',
                 'warnings.body',
