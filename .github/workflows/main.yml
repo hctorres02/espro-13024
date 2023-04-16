@@ -34,5 +34,6 @@ jobs:
         key: ${{ secrets.password }}
         script: |
           cd ${{ secrets.server_dir }}
-          chown -R www ./
+          chown -R ${{ secrets.username }}:apache ./
+          chmod -R g+s ./
           composer dump-autoload
